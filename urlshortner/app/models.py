@@ -11,3 +11,15 @@ class ShortURL(models.Model):
 
     def __str__(self):
         return self.short_code
+
+class ClickLog(models.Model):
+    url = models.ForeignKey(
+        ShortURL,
+        on_delete=models.CASCADE
+    )
+
+    ip_address = models.GenericIPAddressField()
+
+    clicked_at = models.DateTimeField(
+        auto_now_add=True
+    )
