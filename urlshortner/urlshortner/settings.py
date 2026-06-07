@@ -141,9 +141,12 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': '123',
-            'secret': '456',
+            'client_id': '568867216151-ff67k4pe5vguil90pevqs09m0mp50fil.apps.googleusercontent.com',
+            'secret': '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',
             'key': ''
         }
     }
 }
+
+#bypass redirect/confirmation page on google login
+SOCIALACCOUNT_LOGIN_ON_GET = True
