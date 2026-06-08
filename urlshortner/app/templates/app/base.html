@@ -1,0 +1,60 @@
+{% load static %}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+
+<link rel="stylesheet" href="{% static 'app/base.css' %}">
+<div id="shell">
+    <div id="nav-bar">
+        <input id="nav-toggle" type="checkbox" checked="checked" />
+        <div id="nav-header"><a id="nav-title" href="#">URL<i class="fab fa-codepen"></i> Shortner</a>
+            <label for="nav-toggle"><span id="nav-toggle-burger"></span></label>
+            <hr />
+        </div>
+        <div id="nav-content">
+            <div class="nav-button">
+                <i class="fas fa-plus-circle"></i>
+                <span>Create Link</span>
+            </div>
+
+            <div class="nav-button">
+                <i class="fas fa-link"></i>
+                <span>Your Links</span>
+            </div>
+
+            <div class="nav-button">
+                <i class="fas fa-chart-line"></i>
+                <span>Analytics</span>
+            </div>
+
+            <hr />
+
+            <div class="nav-button">
+                <i class="fas fa-crown"></i>
+                <span>URL Shortener Pro</span>
+            </div>
+
+            <div id="nav-highlight"></div>
+        </div>
+        <input id="nav-footer-toggle" type="checkbox" />
+        <div id="nav-footer">
+            <div id="nav-footer-heading">
+                <div id="nav-footer-avatar"><img src="https://gravatar.com/avatar/4474ca42d303761c2901fa819c4f2547" />
+                </div>
+                <div id="nav-footer-titlebox"><a id="nav-footer-title" href="" target="_blank">uahnbu</a><span
+                        id="nav-footer-subtitle">Admin</span></div>
+                <label for="nav-footer-toggle"><i class="fas fa-caret-up"></i></label>
+            </div>
+            <div id="nav-footer-content">
+                <Lorem>logout</Lorem>
+            </div>
+        </div>
+    </div>
+
+    <div id="body">
+        {% block content %}
+
+
+        {% endblock %}
+    </div>
+</div>
