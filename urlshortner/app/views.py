@@ -7,32 +7,66 @@ from .utils import generate_code
 def homepage(request):
     return render(request , 'app/home.html')
 
-def createlink(request):
+def link_create(request):
     if request.method =="GET":
         form = URLForm()
-        return render(request , 'app/create_link.html',{"form":form})
+        return render(request , 'app/link.html',{"form":form})
     if request.method == "POST":
         form = URLForm(request.POST)
+
         if form.is_valid():
             instance = form.save(commit=False)
 
-        custom = form.cleaned_data["custom_code"]
-        if custom:
-            if ShortURL.objects.filter(short_code=custom).exists():
-                messages.error(request,"Already taken")
+            if not instance.short_code:
+                while True:
+                    instance.short_code = generate_code()
 
-                return redirect("home")
+                    if not ShortURL.objects.filter(
+                        short_code=instance.short_code
+                    ).exists():
+                        break
+                #db+integrity errors could be efficient
 
-            code = custom
-        else:
-            while True:
-                code = generate_code()
-                if not ShortURL.objects.filter(short_code=code).exists():
-                    break
+            instance.user = request.user
+            instance.save()
+            print(instance.short_code)
+            return redirect("home")
 
-        instance.user = request.user
-        instance.short_code = code
-        instance.save()
-        print(code)
+        return render(request, "app/link.html", {"form": form})
+
+def redirect_url(request):
+    pass
+
+def link_delete(request , id):
+    url = ShortURL.objects.get(id =id)
+    
+    if url.user.id != request.user.id:
+        messages.error(request,"Invalid URL")
+        return redirect("home")
+    
+    if request.method == "DELETE":
+
+        if url.user.id != request.user.id:
+            messages.error(request,"Invalid URL")
+            return redirect("home")
+        
+        url.delete()
         return redirect("home")
 
+def link_edit(request,id):
+    url = ShortURL.objects.get(id=id)
+
+    if url.user.id != request.user.id:
+        messages.error(request,"Invalid URL")
+        return redirect("home")
+
+    if request.method == "GET":
+        form = URLForm(instance=url)
+        return render(request , 'app/link.html',{"form":form})
+
+    if request.method == "POST":
+        form = URLForm(request.POST,instance=url)
+        if form.is_valid():
+            form.save()
+            return redirect("home")
+        
