@@ -2,59 +2,71 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
-
 <link rel="stylesheet" href="{% static 'app/base.css' %}">
+
 <div id="shell">
     <div id="nav-bar">
-        <input id="nav-toggle" type="checkbox" checked="checked" />
-        <div id="nav-header"><a id="nav-title" href="#">URL<i class="fab fa-codepen"></i> Shortner</a>
+        <input id="nav-toggle" type="checkbox" />
+        <div id="nav-header">
+            <a id="nav-title" href="{% url 'home' %}">URL<i class="fab fa-codepen"></i> Shortner</a>
             <label for="nav-toggle"><span id="nav-toggle-burger"></span></label>
             <hr />
         </div>
+
         <div id="nav-content">
-            <div class="nav-button">
+            <a class="nav-button" href="{% url 'create_link' %}">
                 <i class="fas fa-plus-circle"></i>
                 <span>Create Link</span>
-            </div>
-
-            <div class="nav-button">
+            </a>
+            <a class="nav-button" href="{% url 'links' %}">
                 <i class="fas fa-link"></i>
                 <span>Your Links</span>
-            </div>
-
-            <div class="nav-button">
-                <i class="fas fa-chart-line"></i>
-                <span>Analytics</span>
-            </div>
-
-            <hr />
-
-            <div class="nav-button">
-                <i class="fas fa-crown"></i>
-                <span>URL Shortener Pro</span>
-            </div>
-
+            </a>
+            {% if user.is_authenticated %}
+            <a class="nav-button" href="{% url 'account_logout' %}">
+                <i class="fas fa-sign-out-alt"></i>
+                <span>Sign Out</span>
+            </a>
+            {% else %}
+            <a class="nav-button" href="{% url 'account_login' %}">
+                <i class="fas fa-sign-in-alt"></i>
+                <span>Sign In</span>
+            </a>
+            <a class="nav-button" href="{% url 'account_signup' %}">
+                <i class="fas fa-user-plus"></i>
+                <span>Sign Up</span>
+            </a>
+            {% endif %}
             <div id="nav-highlight"></div>
         </div>
+
         <input id="nav-footer-toggle" type="checkbox" />
         <div id="nav-footer">
             <div id="nav-footer-heading">
-                <div id="nav-footer-avatar"><img src="https://gravatar.com/avatar/4474ca42d303761c2901fa819c4f2547" />
+                <div id="nav-footer-avatar">
+                    <img
+                        src="https://ui-avatars.com/api/?name={{ user.username|default:'U' }}&background=7c6af7&color=fff&rounded=true" />
                 </div>
-                <div id="nav-footer-titlebox"><a id="nav-footer-title" href="" target="_blank">uahnbu</a><span
-                        id="nav-footer-subtitle">Admin</span></div>
+                <div id="nav-footer-titlebox">
+                    <span id="nav-footer-title">{{ user.username|default:"Guest" }}</span>
+                    <span id="nav-footer-subtitle">{% if user.is_authenticated %}
+                        Member
+                        {% else %}Not signed in
+                        {% endif %}</span>
+                </div>
                 <label for="nav-footer-toggle"><i class="fas fa-caret-up"></i></label>
             </div>
             <div id="nav-footer-content">
-                <Lorem>logout</Lorem>
+                {% if user.is_authenticated %}
+                <a href="{% url 'account_logout' %}">Sign Out</a>
+                {% else %}
+                <a href="{% url 'account_login' %}">Sign In</a>
+                {% endif %}
             </div>
         </div>
     </div>
 
     <div id="body">
-        {% block content %}
-
-
-        {% endblock %}
+        {% block content %}{% endblock %}
     </div>
 </div>

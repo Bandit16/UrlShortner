@@ -1,59 +1,50 @@
 {% extends "account/base.html" %}
 {% load allauth i18n socialaccount %}
-{% block head %}
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-{% endblock head %}
-{% block head_title %}
-{% trans "Signup" %}
-{% endblock head_title %}
-{% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h1 class="text-center">{% trans "Sign Up" %}</h1>
-            <p class="text-center">
-                Already have an account? Then please <a href="{{ login_url }}">sign in</a>
-            </p>
-            {% if not SOCIALACCOUNT_ONLY %}
-            {% url 'account_signup' as action_url %}
-            <form method="post" action="{{ action_url }}" class="mt-4">
-                {% csrf_token %}
-                <div class="form-group">
-                    {% for field in form %}
-                    <div class="form-group">
-                        {{ field.label_tag }} {{ field }}
-                        {% if field.help_text %}
-                        <small class="form-text text-muted">{{ field.help_text }}</small>
-                        {% endif %}
-                        {% for error in field.errors %}
-                        <div class="invalid-feedback">{{ error }}</div>
-                        {% endfor %}
-                    </div>
-                    {% endfor %}
-                </div>
-                {{ redirect_field }}
-                <button type="submit" class="btn btn-primary btn-block">{% trans "Sign Up" %}</button>
-            </form>
-            {% endif %}
-            {% if PASSKEY_SIGNUP_ENABLED %}
-            <hr>
-            <a href="{{ signup_by_passkey_url }}" class="btn btn-outline-primary btn-block mt-3">{% trans "Sign up using
-                a passkey" %}</a>
-            {% endif %}
 
-            {% if SOCIALACCOUNT_ENABLED %}
-            <hr>
-            <div class="text-center">
-                OR
-                <a href="{% provider_login_url 'google' %}" class="btn btn-outline-danger btn-block mt-3">
-                    <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google Logo"
-                        style="width: 20px; height: 20px; margin-right: 8px;">
-                    {% trans "Sign in with Google" %}
-                </a>
-            </div>
-            <!-- {% include "socialaccount/snippets/login.html" with page_layout="entrance" %} -->
-            {% endif %}
+{% block head_title %}{% trans "Sign Up" %}{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <div class="brand">
+        <a href="{% url 'home' %}">URL<span>&#9632;</span> Shortner</a>
+    </div>
+    <h2>Create account</h2>
+
+    {% if not SOCIALACCOUNT_ONLY %}
+    {% url 'account_signup' as action_url %}
+    <form method="post" action="{{ action_url }}">
+        {% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% if field.help_text %}<small style="color:var(--navbar-light-secondary);font-size:.75rem;">{{ field.help_text }}</small>{% endif %}
+            {% if field.errors %}<ul class="errorlist">{% for e in field.errors %}<li>{{ e }}</li>{% endfor %}</ul>{% endif %}
         </div>
+        {% endfor %}
+        {{ redirect_field }}
+        <button type="submit" class="btn btn-primary"><i class="fas fa-user-plus"></i> {% trans "Sign Up" %}</button>
+    </form>
+    {% endif %}
+
+    {% if PASSKEY_SIGNUP_ENABLED %}
+    <div class="divider">or</div>
+    <a href="{{ signup_by_passkey_url }}" class="social-btn">
+        <i class="fas fa-key"></i> {% trans "Sign up with a passkey" %}
+    </a>
+    {% endif %}
+
+    {% get_providers as socialaccount_providers %}
+    {% if socialaccount_providers %}
+    <div class="divider">or continue with</div>
+    <a href="{% provider_login_url 'google' %}" class="social-btn">
+        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" alt="Google">
+        Sign up with Google
+    </a>
+    {% endif %}
+
+    <div class="auth-footer">
+        Already have an account? <a href="{{ login_url }}">Sign in</a>
     </div>
 </div>
 {% endblock content %}

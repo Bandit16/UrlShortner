@@ -2,6 +2,41 @@
 {% load static %}
 {% block content %}
 
+<div class="hero">
+    <h1>Shorten. Share.<br>Track.</h1>
+    <p>Create clean, branded short links in seconds. Track clicks and manage all your URLs from one dashboard.</p>
+    <div class="hero-actions">
+        {% if user.is_authenticated %}
+        <a href="{% url 'create_link' %}" class="btn btn-primary"><i class="fas fa-plus"></i> Create a Link</a>
+        <a href="{% url 'links' %}" class="btn btn-ghost"><i class="fas fa-link"></i> My Links</a>
+        {% else %}
+        <a href="{% url 'account_signup' %}" class="btn btn-primary"><i class="fas fa-rocket"></i> Get Started Free</a>
+        <a href="{% url 'account_login' %}" class="btn btn-ghost"><i class="fas fa-sign-in-alt"></i> Sign In</a>
+        {% endif %}
+    </div>
+</div>
 
+<div class="features">
+    <div class="feature-card">
+        <i class="fas fa-bolt"></i>
+        <h3>Instant Short Links</h3>
+        <p>Paste any URL and get a short link in one click — custom codes supported.</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-chart-line"></i>
+        <h3>Click Analytics</h3>
+        <p>See how many times each link was clicked and who visited.</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-qrcode"></i>
+        <h3>QR Codes</h3>
+        <p>Every link gets a scannable QR code generated automatically.</p>
+    </div>
+    <div class="feature-card">
+        <i class="fas fa-clock"></i>
+        <h3>Expiry Dates</h3>
+        <p>Set an expiry date on any link to automatically disable it.</p>
+    </div>
+</div>
 
 {% endblock content %}
