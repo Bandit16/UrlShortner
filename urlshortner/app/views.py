@@ -1,4 +1,4 @@
-from django.shortcuts import render , redirect ,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from .forms import URLForm
@@ -6,7 +6,6 @@ from .models import *
 from django.contrib import messages
 from .utils import generate_code
 from datetime import timezone
-from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def homepage(request):
@@ -14,9 +13,9 @@ def homepage(request):
 
 @login_required
 def link_create(request):
-    if request.method =="GET":
+    if request.method == "GET":
         form = URLForm()
-        return render(request , 'app/link.html',{"form":form})
+        return render(request, 'app/link_create.html', {"form": form})
     if request.method == "POST":
         form = URLForm(request.POST)
 
@@ -35,7 +34,7 @@ def link_create(request):
 
             instance.user = request.user
             instance.save()
-            print(instance.short_code)
+            messages.success(request, "Link created successfully.")
             return redirect("home")
 
         return render(request, "app/link_create.html", {"form": form})
@@ -62,31 +61,31 @@ def redirect_url(request, code):
 
 @login_required
 def link_delete(request , id):
-    url = get_object_or_404(ShortURL , id =id , user= request.user )
+    url = get_object_or_404(ShortURL, id=id, user=request.user)
     
-    if request.method == "POST":
+    if request.method == "GET":
+        return render(request, "app/link_delete.html", {"url": url})
 
+    if request.method == "POST":
         url.delete()
+        messages.success(request, "Link deleted successfully.")
         return redirect("home")
 
 @login_required
 def link_edit(request,id):
-    url = ShortURL.objects.get(id=id)
-    # url = get_object_or_404
-
-    if url.user.id != request.user.id:
-        messages.error(request,"Invalid URL")
-        return redirect("home")
+    url = get_object_or_404(ShortURL, id=id, user=request.user)
 
     if request.method == "GET":
         form = URLForm(instance=url)
-        return render(request , 'app/link_edit.html',{"form":form})
+        return render(request, 'app/link_edit.html', {"form": form, "url": url})
 
     if request.method == "POST":
-        form = URLForm(request.POST,instance=url)
+        form = URLForm(request.POST, instance=url)
         if form.is_valid():
             form.save()
+            messages.success(request, "Link updated successfully.")
             return redirect("home")
+        return render(request, "app/link_edit.html", {"form": form, "url": url})
         
 @login_required
 def links(request):

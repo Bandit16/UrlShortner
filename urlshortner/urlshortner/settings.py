@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 import os 
-
+from dotenv import load_dotenv
+ENV_FILE = Path(__file__).resolve().parent / '.env'
+load_dotenv(dotenv_path=ENV_FILE)
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -140,8 +142,8 @@ SOCIALACCOUNT_PROVIDERS = {
         # (``socialaccount`` app) containing the required client
         # credentials, or list them here:
         'APP': {
-            'client_id': '568867216151-ff67k4pe5vguil90pevqs09m0mp50fil.apps.googleusercontent.com',
-            'secret': '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',
+            'client_id': os.getenv('client_id'),
+            'secret': os.getenv('client_secret'),
             'key': ''
         }
     }
@@ -149,7 +151,7 @@ SOCIALACCOUNT_PROVIDERS = {
 
 #bypass redirect/confirmation page on google login
 SOCIALACCOUNT_LOGIN_ON_GET = True
-
+ACCOUNT_LOGOUT_ON_GET = True
 
 LOGIN_URL = "/accounts/login//"
 LOGIN_REDIRECT_URL = "/"

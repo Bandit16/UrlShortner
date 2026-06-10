@@ -16,7 +16,7 @@ class URLForm(forms.ModelForm):
     def clean_short_code(self):
         code = self.cleaned_data.get("short_code")
 
-        if code and ShortURL.objects.filter(short_code=code).exists():
+        if code and ShortURL.objects.filter(short_code=code).exclude(pk=self.instance.pk).exists():
 
             raise forms.ValidationError(
                 "This short code is already taken."
