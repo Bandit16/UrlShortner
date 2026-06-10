@@ -150,3 +150,8 @@ SOCIALACCOUNT_PROVIDERS = {
 
 #bypass redirect/confirmation page on google login
 SOCIALACCOUNT_LOGIN_ON_GET = True
+
+
+LOGIN_URL = "/accounts/login//"
+LOGIN_REDIRECT_URL = "/"
+ACCOUNT_SIGNUP_REDIRECT_URL = "/"
